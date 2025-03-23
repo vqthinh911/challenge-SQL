@@ -1,0 +1,19 @@
+[solved]New companies
+Amber's conglomerate corporation just acquired some new companies. Each of the companies follows this hierarchy: 
+Founder=>Lead Manager=> Senior Manager=>Manager=>Employee
+Với các sơ đồ bảng bên dưới, hãy viết truy vấn để in company_code, founder name, total number of lead managers, total number of senior managers, total number of managers, and total number of employees. Order your output by ascending company_code. .
+Ghi chú:
+- Các bảng có thể chứa các bản ghi trùng lặp.
+- company_code là chuỗi, do đó việc sắp xếp không nên là số . Ví dụ, nếu company_codes là C_1 , C_2 và C_10 , thì company_codes tăng dần sẽ là C_1 , C_10 và C_2 .
+Định dạng đầu vào
+Các bảng sau đây chứa dữ liệu công ty:
+  
+Sample Output
+C1 Monika 1 2 1 2
+C2 Samantha 1 1 2 2
+==========================================================================================================================================================================================================================================================
+select c.company_code, founder, count(distinct l.lead_manager_code), count(distinct s.senior_manager_Code), count(distinct m.manager_code), count(distinct e.employee_code)
+
+from (select distinct company_code, founder from Company) c left join Lead_Manager l on c.company_code=l.company_code left join Senior_Manager s on s.lead_manager_code=l.lead_manager_code left join Manager m on m.senior_manager_code=s.senior_manager_code left join Employee e on e.manager_code=m.manager_Code
+
+group by c.company_code, founder order by c.company_code asc
