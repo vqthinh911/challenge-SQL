@@ -1,0 +1,13 @@
+[solved]Average Population
+Query the average population for all cities in CITY, rounded down to the nearest integer.
+INPUT:
+ID NUMBER  
+NAME VARCHAR2(17)
+COUNTRYCODE VARCHAR2(3)
+DISTRICT VARCHAR(20)
+POPULATION NUMBER
+===========================================================================================
+select ROUND(AVG(POPULATION),1)
+from CITY
+===========================================================================================
+OUTPUT: 454250
