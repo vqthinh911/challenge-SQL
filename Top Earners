@@ -1,0 +1,14 @@
+[solved]Top Earners
+We define an employee's total earnings to be their monthly worked, and the maximum total earnings to be the maximum total earnings for any employee in the Employee table.
+Write a query to find the maximum total earnings for all employees as well as the total number of employees who have maximum total earnings. Then print these values as space-separated integers.
+INPUT:
+employee_id int
+name Varchar(20)
+months int
+salary int
+===========================================================================================
+SELECT MAX(salary*months),COUNT(*)
+From  Employee
+Where salary*months = (SELECT MAX(salary*months) From Employee)
+===========================================================================================
+OUTPUT:   108064 7
