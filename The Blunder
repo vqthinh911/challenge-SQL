@@ -1,0 +1,26 @@
+[solved]The Blunder
+Samantha was tasked with calculating the average monthly salaries for all employees in the EMPLOYEES table, but did not realize her keyboard's 0 key was broken until after completing the calculation. She wants your help finding the difference between her miscalculation (using salaries with any zeros removed), and the actual average salary.
+Write a query calculating the amount of error (i.e.:actual - miscalculated average monthly salaries), and round it up to the next integer.
+INPUT:
+ID Integer 
+Name String 
+Salary Integer
+===========================================================================================
+SELECT CEILING(
+    AVG(CAST(SALARY AS DECIMAL(10,2))) - 
+    AVG(CAST(REPLACE(SALARY, '0', '') AS DECIMAL(10,2)))
+) AS Miscalculated_AMT 
+FROM EMPLOYEES;
+
+Explanation:(DECIMAL đảm bảo khi trừ ko mất đi thành phần thập phân như INT)
+DECIMAL(10,2): Kiểu số thực có tối đa 10 chữ số, trong đó 2 chữ số thập phân.
+
+REPLACE(Salary, '0', '') : Thay thế tất cả các ký tự '0' trong cột Salary bằng chuỗi rỗng '', nghĩa là loại bỏ mọi số 0 khỏi giá trị lương.
+
+CAST(REPLACE(Salary, '0', '') AS  DECIMAL(10,2))) : Sau khi loại bỏ các số 0, chuyển đổi kết quả thành một số nguyên (UNSIGNED) để có thể tính toán trung bình.
+
+AVG(CAST(REPLACE(Salary, '0', '') AS  DECIMAL(10,2))) : Lấy trung bình của các mức lương đã được loại bỏ số 0.
+
+CEIL(...) : Làm tròn kết quả lên số nguyên gần nhất.
+===========================================================================================
+OUTPUT:     2253
