@@ -1,0 +1,8 @@
+Kiến thứ cơ bản SQL
+Cấu Trúc: SELECT [DISTINCT] cột_1, cột_2, ...  
+          FROM bảng_nguồn
+          WHERE điều_kiện_lọc
+          GROUP BY cột_nhóm
+          HAVING điều_kiện_nhóm
+          OVER BY cột_sắp_xếp ASC|DESC
+          LIMIT số_lượng_kết_quả
