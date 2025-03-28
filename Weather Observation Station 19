@@ -1,0 +1,24 @@
+[solved] Weather Observation Station 19
+Consider P1(a,c) and P2(b,d) to be two points on a 2D plane where (a,b) are the respective minimum and maximum values of Northern Latitude (LAT_N) and (c,d) are the respective minimum and maximum values of Western Longitude (LONG_W) in STATION. 
+Query the Euclidean Distance between points P1 and P2 and format your answer to display 4 decimal digits.
+Euclidean Distance: SQRT((b-a)^2+(d-c)^2))
+INPUT:
+ID int
+CITY varchar(20)
+STATE varchar(2)
+LAT_N float(8)
+LONG_W float(8)
+===========================================================================================
+WITH P1(a,c) AS(SELECT MIN(LAT_N) AS a, MIN(LONG_W) AS c 
+          FROM STATION),
+     P2(b,d) AS(SELECT MAX(LAT_N) AS b, MAX(LONG_W) AS d
+          FROM STATION)
+SELECT CAST((SQRT(POWER(b-a,2)+POWER(d-c,2)))AS DECIMAL(10,4))
+FROM P1,P2
+or
+
+SELECT CAST(SQRT(POWER(MAX(LAT_N) - MIN(LAT_N), 2) + POWER(MAX(LONG_W) - MIN(LONG_W), 2)) AS DECIMAL(10,4)) AS EuclideanDistance 
+FROM STATION
+
+===========================================================================================
+OUTPUT:   184.1616
