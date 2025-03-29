@@ -1,0 +1,37 @@
+[solved]Population Census 
+Given the CITY and COUNTRY tables, query the sum of the populations of all cities where the CONTINENT is 'Asia'.
+
+Note: CITY.CountryCode and COUNTRY.Code are matching key columns.
+
+Input :
+[table CITY]
+ID int
+NAME varchar2(17)
+COUNTRYCODE varchar2(3)
+DISTRICT varchar2(20)
+POPULATION int
+
+[table COUNTRY]
+CODE VARCHAR2(3)
+NAME VARCHAR2(44)
+CONTINENT VARCHAR2(13)
+REGION VARCHAR2(25)
+SURFACEAREA INT
+INDEPYEAR VARCHAR(5)
+POPULATION INT
+LIFEEXPECTANCY VARCHAR2(4)
+GNP INT
+GNPOLD VARCHAR2(9)
+LOCALNAME VARCHAR2(44)
+GOVERMENTFORM VARCHAR(44)
+HEADOFSTATE VARCHAR2(32)
+CAPITAL VARCHAR2(4)
+CODE2 VARCHAR2(2)
+==================================================================================================================
+SELECT SUM(CITY.POPULATION)
+FROM CITY
+JOIN COUNTRY ON CITY.CountryCode=COUNTRY.Code
+WHERE CONTINENT ='Asia'
+==================================================================================================================
+OUTPUT: 27028484
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
