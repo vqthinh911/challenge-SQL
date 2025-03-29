@@ -2,7 +2,17 @@
 Given the CITY and COUNTRY tables, query the names of all the continents (COUNTRY.Continent) and their respective average city populations (CITY.Population) rounded down to the nearest integer.
 
 Note: CITY.CountryCode and COUNTRY.Code are matching key columns.
+Làm tròn xuống có nghĩa là lấy phần nguyên nhỏ hơn hoặc bằng số ban đầu.
 
+Ví dụ, nếu bạn có một số thập phân:
+
+    4.7, làm tròn xuống sẽ thành 4
+
+    3.9, làm tròn xuống sẽ thành 3
+
+    2.1, làm tròn xuống sẽ thành 2
+
+    -3.2, làm tròn xuống sẽ thành -4 (vì -4 nhỏ hơn -3)
 Input :
 [table CITY]
 ID int
