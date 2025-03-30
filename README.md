@@ -1,6 +1,16 @@
 # SQL Review Guide
 
-# Hướng Dẫn Cơ Bản về SQL
+# Hướng Dẫn Cơ Bản về SQL'
+
+## 0. Cấu trúc truy vấn SQL
+  ```sql
+SELECT column
+FROM table
+WHERE dk1,..
+GROUP BY column
+HAVING dk2
+ORDER BY column
+```
 
 ## 1. Câu lệnh SELECT – Lấy dữ liệu từ bảng
 Câu lệnh `SELECT` được sử dụng để truy vấn dữ liệu từ cơ sở dữ liệu.
