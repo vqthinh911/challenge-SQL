@@ -1,0 +1,84 @@
+[solved] Contest Leaderboard
+You did such a great job helping Julia with her last coding contest challenge that she wants you to work on this one, too!
+
+The total score of a hacker is the sum of their maximum scores for all of the challenges.
+Write a query to print the hacker_id, name, and total score of the hackers ordered by the descending score. 
+If more than one hacker achieved the same total score, then sort the result by ascending hacker_id. 
+Exclude all hackers with a total score of 0 from your result
+
+Input:
+[Hackers table]
+hacker_id int
+name string
+
+[Submissions table]
+submission_id int
+hacker_id int
+challenge_id int
+score int
+
+=============================================================================================================================
+WITH diemmax as (
+SELECT s.challenge_id, h.hacker_id, h.name, MAX(s.score) AS diem
+FROM Hackers h
+JOIN Submissions s ON h.hacker_id = s.hacker_id
+GROUP BY s.challenge_id , h.hacker_id, h.name)
+
+SELECT d.hacker_id,d.name,SUM(d.diem)
+FROM diemmax d
+GROUP BY d.hacker_id,d.name
+HAVING SUM(d.diem) >0
+ORDER BY SUM(d.diem) DESC ,d.hacker_id ASC
+
+Or
+
+SELECT H.hacker_id, H.name, SUM(MAX_SCORE) AS total_score
+FROM Hackers H 
+JOIN ( SELECT hacker_id, challenge_id, MAX(score) AS MAX_SCORE 
+       FROM Submissions 
+       GROUP BY hacker_id, challenge_id ) S 
+ON H.hacker_id = S.hacker_id 
+GROUP BY H.hacker_id, H.name
+HAVING total_score > 0 
+ORDER BY total_score DESC, H.hacker_id ASC;
+=============================================================================================================================
+OUTPUT:
+76971 Ashley 760
+
+84200 Susan 710
+
+76615 Ryan 700
+
+82382 Sara 640
+
+79034 Marilyn 580
+
+78552 Harry 570
+
+74064 Helen 540
+
+78688 Sean 540
+
+83832 Jason 540
+
+72796 Jose 510
+
+76216 Carlos 510
+
+90304 Lillian 500
+
+88507 Patrick 490
+
+72505 Keith 480
+
+88018 Dennis 480
+
+78918 Julia 470
+
+85319 Shawn 470
+
+71357 Bobby 460
+
+72047 Elizabeth 460
+
+74147 Jason 460
