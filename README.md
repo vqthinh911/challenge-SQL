@@ -77,6 +77,7 @@ GROUP BY department;
 ### 🔹 `HAVING`
 - Dùng để lọc dữ liệu sau khi nhóm (`GROUP BY`).
 - Có thể sử dụng với các hàm tổng hợp.
+- Nhưng không thể sử dụng ALIAS đã gợi ở SELECT
 - Ví dụ:
   ```sql
   SELECT department, COUNT(*)
@@ -88,6 +89,7 @@ GROUP BY department;
 ### 🔹 `ORDER BY`
 - Dùng để sắp xếp dữ liệu theo một hoặc nhiều cột.
 - Có thể dùng với các hàm tổng hợp nhưng không lọc dữ liệu như `WHERE` hoặc `HAVING`.
+- Không được dùng trong  CTE
 - Ví dụ:
   ```sql
   SELECT name, salary FROM employees ORDER BY salary DESC;
