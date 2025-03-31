@@ -77,6 +77,7 @@ GROUP BY department;
 ### 🔹 `HAVING`
 - Dùng để lọc dữ liệu sau khi nhóm (`GROUP BY`).
 - Có thể sử dụng với các hàm tổng hợp.
+- Phải nhóm dữ liệu đẩy đủ dể tính FUNCTION trên SELECT
 - Nhưng không thể sử dụng ALIAS đã gợi ở SELECT
 - Ví dụ:
   ```sql
