@@ -1,0 +1,107 @@
+#**[solved]SQL Project Planning**
+You are given a table, Projects, containing three columns: Task_ID, Start_Date and End_Date. 
+It is guaranteed that the difference between the End_Date and the Start_Date is equal to 1 day for each row in the table.
+If the End_Date of the tasks are consecutive, then they are part of the same project. 
+Samantha is interested in finding the total number of different projects completed.
+Write a query to output the start and end dates of projects listed by the number of days it took to complete the project in ascending order.
+If there is more than one project that have the same number of completion days, then order by the start date of the project.
+#**Input :**
+[table Project]
+Task_ID int
+Start_Date date
+End_Date date
+
+#**Idea:**
+
+## **Mô tả Bài Toán**
+Truy vấn SQL nhằm **nhóm các công việc (“Task”) thành dự án (“Project”)** dựa trên ngày bắt đầu (`start_date`) và ngày kết thúc (`end_date`).
+
+## **Cách Tiếp Cận**
+1. **Tìm ngày kết thúc trước đó** của một công việc bằng `LAG(end_date) OVER(ORDER BY end_date)`.
+2. **Gán giá trị cho từng dòng để xác định nhóm dự án (`group_check`)**:
+   - Gán `1` -> nếu `start_date` lớn hơn `prev_end` hoặc `prev_end` là `NULL` (bắt đầu dự án mới).
+   - Gán `0` -> nếu `start_date` trùng `prev_end` (cùng dự án).
+3. **Tính tổng cộng dồn (`cumulative_sum`)** dùng `SUM(group_check) OVER(ORDER BY end_date)`, nhằm xác định danh tính nhóm.
+4. **Nhóm theo `cumulative_sum` và tính MIN(start_date) và MAX(end_date)** cho từng nhóm.
+5. **Sắp xếp theo thời gian kéo dài dự án** (`DATEDIFF(MAX(end_date), MIN(start_date)) ASC`).
+
+## **Truy Vấn SQL**
+```sql
+WITH cte AS (
+    SELECT Task_ID, Start_Date, End_Date,
+           LAG(end_date) OVER(ORDER BY end_date) AS prev_end
+    FROM projects
+),
+groupTasks AS (
+    SELECT Start_Date, End_Date,
+           (CASE WHEN Start_Date > prev_end OR prev_end IS NULL THEN 1 ELSE 0 END) AS group_check
+    FROM cte
+)
+SELECT MIN(A.start_date) AS start_date, MAX(end_date) AS end_date
+FROM (
+    SELECT *, SUM(group_check) OVER(ORDER BY end_date) AS cumulative_sum
+    FROM groupTasks
+) AS A
+GROUP BY A.cumulative_sum
+ORDER BY DATEDIFF(MAX(A.end_date), MIN(A.start_date)) ASC;
+```
+
+## **Giải Thích**
+- `LAG(end_date) OVER(ORDER BY end_date)`: lấy giá trị end_date của dòng trước đó để so sánh với start_date của dòng hiện tại.
+- `CASE WHEN Start_Date > prev_end OR prev_end IS NULL THEN 1 ELSE 0 END`: Nếu start_date lớn hơn prev_end hoặc prev_end là NULL, thì đây là nhiệm vụ đầu tiên của một dự án mới (group_check = 1).Ngược lại, nếu start_date trùng với prev_end, thì nó thuộc cùng một dự án (group_check = 0).
+- `SUM(group_check) OVER(ORDER BY end_date)`: Tính danh tính nhóm dự án.Trực giác: Miễn là tổng cộng dồn không thay đổi, điều đó có nghĩa là các nhiệm vụ thuộc cùng một dự án. Nếu giá trị tổng cộng dồn thay đổi, có nghĩa là một dự án mới bắt đầu.
+- `GROUP BY cumulative_sum`: Nhóm các công việc thuộc cùng dự án.
+- `ORDER BY DATEDIFF(MAX(A.end_date), MIN(A.start_date)) ASC`: Sắp xếp dự án theo số ngày kéo dài.
+
+## **Ứng Dụng**
+- Phân tích dự án trong doanh nghiệp.
+- Tính toán thời gian hoàn thành các dự án.
+- Xác định mốc thời gian bắt đầu và kết thúc chính xác cho các dự án.
+
+
+==================================================================================================================
+with cte AS
+(
+    SELECT Task_ID, Start_Date, End_Date, LAG(end_date) OVER(ORDER BY end_date) as              prev_end
+    FROM 
+    projects
+),
+groupTasks AS
+(
+    SELECT Start_Date, End_Date,
+    (CASE WHEN Start_Date > prev_end OR prev_end IS NULL THEN 1 ELSE 0 END) as                  group_check
+    FROM
+    cte
+)
+SELECT MIN(A.start_date) as start_date, MAX(end_date) AS end_date
+FROM
+(SELECT *,SUM(group_check) OVER(ORDER BY end_date) as cummulative_sum 
+FROM 
+groupTasks) as A
+GROUP BY A.cummulative_sum
+ORDER BY DATEDIFF(MAX(A.end_date),MIN(A.start_date)) ASC;
+
+==================================================================================================================
+OUTPUT:     
+    2015-10-15 2015-10-16
+
+    2015-10-17 2015-10-18
+
+    2015-10-19 2015-10-20
+
+    2015-10-21 2015-10-22
+
+    2015-11-01 2015-11-02
+
+    2015-11-17 2015-11-18
+
+    2015-10-11 2015-10-13
+
+    2015-11-11 2015-11-13
+
+    2015-10-01 2015-10-05
+
+    2015-11-04 2015-11-08
+
+    2015-10-25 2015-10-31
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
