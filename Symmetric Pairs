@@ -1,0 +1,54 @@
+[solved] Symmetric Pairs
+You are given a table, Functions, containing two columns: X and Y.
+Two pairs (X1, Y1) and (X2, Y2) are said to be symmetric pairs if X1 = Y2 and X2 = Y1.
+Write a query to output all such symmetric pairs in ascending order by the value of X. List the rows such that X1 ≤ Y1. 
+
+INPUT:
+[table Functions]
+X int
+Y int
+
+========================================================================================================================
+WITH cte AS (
+    SELECT *, 
+           row_number() OVER (ORDER BY x) AS rowno 
+    FROM Functions
+)
+SELECT a.x, a.y 
+FROM cte a 
+JOIN cte b ON a.rowno < b.rowno
+WHERE (a.x = b.y) AND (b.x = a.y)
+
+[Giải Thích]
+- WITH cte
+Đánh số từng dòng với table cte để tiện so sánh cho bên dưới
+- JOIN cte b ON a.rowno < b.rowno
+Giống thuật toán so sánh từ trên xuống dưới từ hàng a.rowno đến b.rowno
+ON a.rowno < b.rowno: Điều kiện này đảm bảo rằng mỗi cặp (a, b) chỉ được so sánh một lần. Cụ thể, a.rowno < b.rowno đảm bảo rằng dòng a có số thứ tự nhỏ hơn dòng b,
+từ đó tránh việc so sánh cặp (a.x, a.y) với chính nó hoặc lặp lại cặp trong thứ tự ngược lại (b.x, b.y).
+- WHERE (a.x = b.y) AND (b.x = a.y)
+    Điều kiện cặp đối xứng: Đây là điều kiện chính để tìm ra các cặp đối xứng, tức là các cặp (X, Y) và (Y, X). Cụ thể:
+
+        a.x = b.y (giá trị x của bảng a phải bằng giá trị y của bảng b).
+
+        b.x = a.y (giá trị x của bảng b phải bằng giá trị y của bảng a).
+
+Điều kiện này giúp xác định các cặp đối xứng, nghĩa là nếu có một cặp (X, Y) trong bảng a, thì sẽ có một cặp (Y, X) trong bảng b.
+
+========================================================================================================================
+OUTPUT:
+    2 24
+
+    4 22
+
+    5 21
+
+    6 20
+
+    8 18
+
+    9 17
+
+    11 15
+
+    13 13
